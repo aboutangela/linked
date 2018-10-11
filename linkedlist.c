@@ -1,31 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include "linkedlist.h"
-
-struct node { int i; struct node *next;};
+#include "linkedlist.h"
 
 void print_list(struct node * current){
-  printf("%d \n", current->i);
-  if(current->next){
-    print_list(current->next);
+  if(!current)
+    return;
+  while(current){
+    printf("%d \n", current->i);
+    current = current->next;
   }
 }
 
 struct node * insert_front(struct node * current, int add){
-  struct node new;
-  new.i = add;
-
-  
+  struct node * new = (struct node *) malloc(sizeof(struct node));
+  new->i = add;
+  new->next = current;
+  return new;
 }
 
-int main(){
-  struct node head;
-  head.i = 2;
-
-  struct node one;
-  one.i = 4;
-
-  head.next = &one;
-  one.next = NULL;
-  print_list(&head);
+struct node * free_list(struct node * current){
+  struct node * hold;
+  while(current){
+    hold = current->next;
+    free(current);
+    current = hold;
+  }
+  return current;
 }
